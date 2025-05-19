@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, Image,
-  StyleSheet, ScrollView, Alert, Platform, Dimensions
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ScrollView,
+  Platform,
+  Image,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
-
-const { width } = Dimensions.get('window');
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function LoginScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -17,153 +23,104 @@ export default function LoginScreen() {
   const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
-    const loadSavedData = async () => {
-      const savedEmail = await AsyncStorage.getItem('email');
-      const savedSenha = await AsyncStorage.getItem('senha');
+    const loadRemembered = async () => {
+      const savedEmail = await AsyncStorage.getItem('remember:email');
+      const savedSenha = await AsyncStorage.getItem('remember:senha');
       if (savedEmail && savedSenha) {
         setEmail(savedEmail);
         setSenha(savedSenha);
         setRememberMe(true);
       }
     };
-    loadSavedData();
+    loadRemembered();
   }, []);
 
   const handleLogin = async () => {
     if (!email || !senha) {
-      Alert.alert('Erro', 'Preencha e-mail e senha para acessar.');
+      Alert.alert('Erro', 'Preencha todos os campos.');
       return;
     }
 
-    try {
-      const userKey = `user:${email.toLowerCase()}`;
-      const stored = await AsyncStorage.getItem(userKey);
+    const key = `user:${email.trim().toLowerCase()}`;
+    const storedUser = await AsyncStorage.getItem(key);
 
-      if (!stored) {
-        Alert.alert('Erro', 'Usuário não encontrado. Cadastre-se.');
-        return;
-      }
-
-      const parsed = JSON.parse(stored);
-      if (parsed.password !== senha) {
-        Alert.alert('Erro', 'Senha incorreta.');
-        return;
-      }
-
-      if (rememberMe) {
-        await AsyncStorage.setItem('email', email);
-        await AsyncStorage.setItem('senha', senha);
-      } else {
-        await AsyncStorage.removeItem('email');
-        await AsyncStorage.removeItem('senha');
-      }
-
-      navigation.navigate('Main');
-    } catch (error) {
-      Alert.alert('Erro', 'Erro ao tentar logar.');
-    }
-  };
-
-  const handleCadastro = async () => {
-    if (!email || !senha) {
-      Alert.alert('Erro', 'Preencha e-mail e senha para cadastrar.');
+    if (!storedUser) {
+      Alert.alert('Erro', 'Usuário não encontrado.');
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      Alert.alert('Erro', 'E-mail inválido. Use o formato: exemplo@exemplo.com');
+    const { senha: senhaSalva } = JSON.parse(storedUser);
+
+    if (senha !== senhaSalva) {
+      Alert.alert('Erro', 'Senha incorreta.');
       return;
     }
 
-    if (senha.length < 6) {
-      Alert.alert('Erro', 'A senha deve ter pelo menos 6 caracteres.');
-      return;
+    // Lembrar dados se marcado
+    if (rememberMe) {
+      await AsyncStorage.setItem('remember:email', email);
+      await AsyncStorage.setItem('remember:senha', senha);
+    } else {
+      await AsyncStorage.removeItem('remember:email');
+      await AsyncStorage.removeItem('remember:senha');
     }
 
-    try {
-      const userKey = `user:${email.toLowerCase()}`;
-      const exists = await AsyncStorage.getItem(userKey);
-
-      if (exists) {
-        Alert.alert('Aviso', 'Usuário já cadastrado.');
-        return;
-      }
-
-      await AsyncStorage.setItem(userKey, JSON.stringify({ email, password: senha }));
-      Alert.alert('Sucesso', 'Usuário cadastrado com sucesso!');
-    } catch (error) {
-      Alert.alert('Erro', 'Erro ao tentar cadastrar.');
-    }
+    navigation.navigate('Main');
   };
 
   return (
     <ScrollView contentContainerStyle={styles.scroll}>
       <View style={styles.container}>
-        <Image source={require('../assets/img_1.png')} style={styles.backIcon} />
-        <Image source={require('../assets/img.png')} style={styles.logo} />
-        <Text style={styles.title}>Com o e-mail e senha</Text>
+        <Text style={styles.title}>Login</Text>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Digite seu e-mail:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="E-mail"
-            placeholderTextColor="#aaa"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-          />
-        </View>
+        <TextInput
+          style={styles.input}
+          placeholder="E-mail"
+          placeholderTextColor="#aaa"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Digite sua senha:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Senha"
-            placeholderTextColor="#aaa"
-            secureTextEntry
-            value={senha}
-            onChangeText={setSenha}
-          />
-        </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Senha"
+          placeholderTextColor="#aaa"
+          secureTextEntry
+          value={senha}
+          onChangeText={setSenha}
+        />
 
-        <View style={styles.row}>
-          <TouchableOpacity
-            style={styles.checkboxContainer}
-            onPress={() => setRememberMe(!rememberMe)}
-          >
-            <View style={styles.checkbox}>
-              {rememberMe && (
-                <Image
-                  source={require('../assets/ic_check.png')}
-                  style={styles.checkmark}
-                />
-              )}
-            </View>
-            <Text style={styles.rememberText}>Lembrar minha senha</Text>
-          </TouchableOpacity>
-          <Text style={styles.forgotText}>Esqueci minha senha</Text>
-        </View>
+        {/* Lembrar senha */}
+        <TouchableOpacity
+          style={styles.checkboxContainer}
+          onPress={() => setRememberMe(!rememberMe)}
+        >
+          <View style={styles.checkbox}>
+            {rememberMe && (
+              <Image
+                source={require('../assets/ic_check.png')}
+                style={styles.checkIcon}
+              />
+            )}
+          </View>
+          <Text style={styles.checkboxLabel}>Lembrar minha senha</Text>
+        </TouchableOpacity>
 
         <View style={styles.buttonRow}>
-          <TouchableOpacity style={styles.secondaryButton} onPress={handleCadastro}>
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={() => navigation.navigate('Register')}
+          >
+            <FontAwesome name="user-plus" size={16} color="#000" style={styles.icon} />
             <Text style={styles.secondaryButtonText}>Cadastrar</Text>
           </TouchableOpacity>
+
           <TouchableOpacity style={styles.primaryButton} onPress={handleLogin}>
+            <FontAwesome name="sign-in" size={16} color="#fff" style={styles.icon} />
             <Text style={styles.primaryButtonText}>Acessar</Text>
           </TouchableOpacity>
-        </View>
-
-        <View style={styles.dividerContainer}>
-          <View style={styles.line} />
-          <Text style={styles.dividerText}>Ou acesse com</Text>
-          <View style={styles.line} />
-        </View>
-
-        <View style={styles.socialRow}>
-          <Image source={require('../assets/imggoogle.png')} style={styles.socialIcon} />
-          <Image source={require('../assets/imgfacebook.png')} style={styles.socialIcon} />
         </View>
       </View>
     </ScrollView>
@@ -174,104 +131,92 @@ const styles = StyleSheet.create({
   scroll: {
     flexGrow: 1,
     justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#121212',
-    paddingVertical: 20,
+    paddingVertical: 30,
+    paddingHorizontal: 20,
   },
   container: {
     width: '100%',
     maxWidth: 480,
-    padding: 24,
-  },
-  backIcon: { width: 24, height: 24, marginBottom: 10, tintColor: '#fff' },
-  logo: {
-    width: 260,
-    height: 120,
     alignSelf: 'center',
-    marginBottom: 20,
-    resizeMode: 'contain',
   },
-  title: { fontSize: 16, fontWeight: 'bold', textAlign: 'center', color: '#fff', marginBottom: 16 },
-  inputGroup: { marginBottom: 16 },
-  label: { fontWeight: 'bold', marginBottom: 6, color: '#ccc' },
+  title: {
+    fontSize: 22,
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 30,
+  },
   input: {
     backgroundColor: '#1E1E1E',
-    borderRadius: 6,
+    borderRadius: 8,
+    paddingVertical: Platform.OS === 'web' ? 14 : 12,
+    paddingHorizontal: 14,
     color: '#fff',
-    paddingHorizontal: 12,
-    paddingVertical: Platform.OS === 'web' ? 14 : 10,
+    fontSize: 16,
+    marginBottom: 16,
   },
-  row: {
+  checkboxContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
     alignItems: 'center',
+    marginBottom: 16,
   },
-  checkboxContainer: { flexDirection: 'row', alignItems: 'center' },
   checkbox: {
-    width: 18,
-    height: 18,
-    borderRadius: 4,
-    borderWidth: 1.5,
-    borderColor: '#ccc',
-    marginRight: 6,
+    width: 20,
+    height: 20,
+    borderWidth: 1,
+    borderColor: '#aaa',
+    marginRight: 8,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#1E1E1E',
+    borderRadius: 4,
   },
-  checkmark: {
-    width: 14,
-    height: 14,
+  checkIcon: {
+    width: 16,
+    height: 16,
     resizeMode: 'contain',
     tintColor: '#fff',
   },
-  rememberText: { fontSize: 14, color: '#ccc' },
-  forgotText: { fontSize: 14, color: '#ccc' },
+  checkboxLabel: {
+    color: '#ccc',
+    fontSize: 14,
+  },
   buttonRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    gap: 12,
+    marginTop: 10,
   },
   primaryButton: {
     backgroundColor: '#e06666',
+    flex: 1,
     padding: 14,
     borderRadius: 8,
-    flex: 1,
-    marginLeft: 8,
     alignItems: 'center',
-  },
-  primaryButtonText: { color: '#fff', fontWeight: 'bold' },
-  secondaryButton: {
-    backgroundColor: '#fff',
-    padding: 14,
-    borderRadius: 8,
-    flex: 1,
-    marginRight: 8,
-    alignItems: 'center',
-  },
-  secondaryButtonText: { fontWeight: 'bold', color: '#000' },
-  dividerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  dividerText: {
-    marginHorizontal: 8,
-    color: '#ccc',
-    fontSize: 12,
-  },
-  line: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#555',
-  },
-  socialRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 20,
   },
-  socialIcon: {
-    width: 40,
-    height: 40,
-    marginHorizontal: 12,
+  primaryButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  secondaryButton: {
+    backgroundColor: '#fff',
+    flex: 1,
+    padding: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  secondaryButtonText: {
+    color: '#000',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  icon: {
+    marginRight: 8,
   },
 });

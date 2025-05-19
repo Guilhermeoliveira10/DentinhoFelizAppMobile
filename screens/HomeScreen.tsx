@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -19,12 +19,28 @@ type TabParamList = {
   Quiz: undefined;
   Help: undefined;
   Alarm: undefined;
+  Profile: undefined; // Adiciona Profile para navegação
 };
 
 const { height } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const navigation = useNavigation<BottomTabNavigationProp<TabParamList>>();
+  const [username, setUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadUsername = async () => {
+      const email = await AsyncStorage.getItem('email');
+      if (email) {
+        const userData = await AsyncStorage.getItem(`user:${email}`);
+        if (userData) {
+          const parsed = JSON.parse(userData);
+          setUsername(parsed.username);
+        }
+      }
+    };
+    loadUsername();
+  }, []);
 
   const handleLogout = async () => {
     if (Platform.OS === 'web') {
@@ -42,10 +58,7 @@ export default function HomeScreen() {
         'Deseja sair?',
         'Você tem certeza que deseja fazer logout?',
         [
-          {
-            text: 'Cancelar',
-            style: 'cancel',
-          },
+          { text: 'Cancelar', style: 'cancel' },
           {
             text: 'Sair',
             style: 'destructive',
@@ -67,17 +80,20 @@ export default function HomeScreen() {
   return (
     <ScrollView contentContainerStyle={styles.scroll}>
       <View style={styles.container}>
-        {/* Botão logout */}
         <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
           <Image source={require('../assets/logout.png')} style={styles.logoutIcon} />
         </TouchableOpacity>
 
         <Image source={require('../assets/img.png')} style={styles.logo} />
 
+        {username && (
+          <Text style={styles.welcomeText}>Bem-vindo(a), {username}!</Text>
+        )}
+
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => alert('Perfil ainda não implementado')}
+            onPress={() => navigation.navigate('Profile')}
           >
             <Image source={require('../assets/icon_profile.png')} style={styles.icon} />
             <Text style={styles.buttonText}>Perfil</Text>
@@ -107,7 +123,6 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Balão e mascote */}
         <View style={styles.mascotContainer}>
           <View style={styles.bubbleWrapper}>
             <Image source={require('../assets/bubble_background.png')} style={styles.bubble} />
@@ -146,8 +161,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logoutIcon: {
-    width: 60,
-    height: 60,
+    width: 42,
+    height: 42,
     resizeMode: 'contain',
     tintColor: '#444',
   },
@@ -161,7 +176,13 @@ const styles = StyleSheet.create({
     width: 350,
     height: 200,
     resizeMode: 'contain',
-    marginBottom: 40,
+    marginBottom: 10,
+  },
+  welcomeText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#333',
   },
   buttonsContainer: {
     flexDirection: 'row',

@@ -1,4 +1,3 @@
-// src/navigation/TabsNavigator.tsx
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,6 +6,7 @@ import HomeScreen from '../screens/HomeScreen';
 import QuizScreen from '../screens/QuizScreen';
 import HelpScreen from '../screens/HelpScreen';
 import AlarmScreen from '../screens/AlarmScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -42,6 +42,9 @@ export default function TabsNavigator() {
             case 'Alarm':
               iconName = 'alarm-outline';
               break;
+            case 'Profile':
+              iconName = 'person-circle-outline';
+              break;
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -52,6 +55,7 @@ export default function TabsNavigator() {
       <Tab.Screen name="Quiz" component={QuizScreen} options={{ title: 'Quizzes' }} />
       <Tab.Screen name="Help" component={HelpScreen} options={{ title: 'Dúvidas' }} />
       <Tab.Screen name="Alarm" component={AlarmScreen} options={{ title: 'Alarme' }} />
+      <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Perfil' }} />
     </Tab.Navigator>
   );
 }
