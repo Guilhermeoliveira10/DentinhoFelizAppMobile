@@ -38,5 +38,3 @@
 ## 🌐 Estrutura da API (CRUD)
 
 A API foi criada usando `JSON Server` e está publicada no [Render](https://render.com). Ela simula um backend para armazenar e manipular as dúvidas que aparecem no app.
-
-### 🔗 URL da API:
