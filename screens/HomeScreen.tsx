@@ -86,17 +86,17 @@ export default function HomeScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Quiz')}>
-            <Image source={require('../assets/quizzes.png')} style={styles.buttonImage} />
+            <Image source={require('../assets/quizes.png')} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Quizzes</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Help')}>
-            <Image source={require('../assets/duvidas.png')} style={styles.buttonImage} />
+            <Image source={require('../assets/help.png')} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Dúvidas</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Alarm')}>
-            <Image source={require('../assets/alarme.png')} style={styles.buttonImage} />
+            <Image source={require('../assets/icon_alarm.png')} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Alarme</Text>
           </TouchableOpacity>
         </View>
