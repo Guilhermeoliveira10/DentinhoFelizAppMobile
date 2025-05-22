@@ -1,3 +1,9 @@
+# Integrantes do Projeto
+**Guilherme Augusto de Oliveira - RM554176**
+**Luiz Alescsander Viana - RM553034**
+**Lucas Martinez Lopes - RM553816** 
+
+
 # 📱 Dentinho Feliz
 
 **Dentinho Feliz** é um aplicativo educacional voltado para crianças com até 14 anos, com o objetivo de promover a conscientização sobre higiene bucal de forma lúdica, interativa e divertida. Através de quizzes, conselhos personalizados e alarmes, o app incentiva bons hábitos de escovação e cuidado dental.
