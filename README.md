@@ -4,22 +4,22 @@
 
 ## 🧩 Funcionalidades
 
-- ✅ Tela de cadastro e login com persistência de dados usando `AsyncStorage`
-- ✅ Login com opção de "Lembrar senha"
-- ✅ Tela inicial com navegação para:
+-  Tela de cadastro e login com persistência de dados usando `AsyncStorage`
+-  Login com opção de "Lembrar senha"
+-  Tela inicial com navegação para:
   - Perfil
   - Quizzes
   - Dúvidas (API externa)
   - Alarme de escovação
-- ✅ Tela de **Perfil** com:
+-  Tela de **Perfil** com:
   - Edição de nome
   - Visualização de email
   - Alteração de senha
   - Upload de imagem de perfil
-- ✅ Tela de **Quiz** com perguntas carregadas de API externa
-- ✅ Tela de **Dúvidas** com categorias e conselhos específicos
-- ✅ Tela de **Alarme** com CRUD completo e persistência em `AsyncStorage`
-- ✅ Tela **Registrar Dúvida (CRUD completo)** para gerenciar dúvidas (conectada à API no Render)
+-  Tela de **Quiz** com perguntas carregadas de API externa
+-  Tela de **Dúvidas** com categorias e conselhos específicos
+-  Tela de **Alarme** com CRUD completo e persistência em `AsyncStorage`
+-  Tela **Registrar Dúvida (CRUD completo)** para gerenciar dúvidas (conectada à API no Render)
 
 ---
 
