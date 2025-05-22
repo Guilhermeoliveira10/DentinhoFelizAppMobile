@@ -47,17 +47,28 @@ const QuizScreen = () => {
 
   const handleSubmit = () => {
     if (!selectedAnswer) return;
-    if (selectedAnswer === questions[currentIndex].correct_answer) {
-      setScore(score + 1);
-    }
+
+    const isCorrect = selectedAnswer === questions[currentIndex].correct_answer;
+    const nextScore = score + (isCorrect ? 1 : 0);
 
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1);
       setSelectedAnswer(null);
+      setScore(nextScore);
     } else {
       Alert.alert(
         'Fim do Quiz',
-        `Você acertou ${score + (selectedAnswer === questions[currentIndex].correct_answer ? 1 : 0)} de ${questions.length} perguntas.`,
+        `Você acertou ${nextScore} de ${questions.length} perguntas.`,
+        [
+          {
+            text: 'Reiniciar Quiz',
+            onPress: () => {
+              setCurrentIndex(0);
+              setScore(0);
+              setSelectedAnswer(null);
+            },
+          },
+        ]
       );
     }
   };
@@ -111,12 +122,36 @@ const QuizScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, alignItems: 'center', backgroundColor: '#f0f0f0' },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { marginTop: 10 },
-  errorText: { fontSize: 16, color: 'gray' },
-  logo: { width: 100, height: 100, marginBottom: 20, resizeMode: 'contain' },
-  question: { fontSize: 18, fontWeight: 'bold', textAlign: 'center', marginBottom: 10 },
+  container: {
+    flex: 1,
+    padding: 20,
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
+  },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 10,
+  },
+  errorText: {
+    fontSize: 16,
+    color: 'gray',
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    marginBottom: 20,
+    resizeMode: 'contain',
+  },
+  question: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
   option: {
     backgroundColor: '#fff',
     padding: 12,
@@ -131,7 +166,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#d1d1d1',
     borderColor: '#888',
   },
-  optionText: { fontSize: 16 },
+  optionText: {
+    fontSize: 16,
+  },
   submitButton: {
     backgroundColor: 'purple',
     padding: 12,
@@ -140,7 +177,11 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
   },
-  submitText: { color: 'white', fontSize: 16, fontWeight: 'bold' },
+  submitText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   disabledButton: {
     backgroundColor: 'gray',
   },
