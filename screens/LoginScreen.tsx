@@ -56,7 +56,7 @@ export default function LoginScreen() {
       return;
     }
 
-    await AsyncStorage.setItem('email', email); // Armazena o email logado
+    await AsyncStorage.setItem('email', email);
 
     if (rememberMe) {
       await AsyncStorage.setItem('remember:email', email);
