@@ -1,15 +1,7 @@
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-  ScrollView,
-  Dimensions,
-  Platform,
-  StatusBar,
+  View, Text, TextInput, TouchableOpacity, StyleSheet, Alert,
+  ScrollView, Dimensions, Platform, StatusBar,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
@@ -45,6 +37,7 @@ export default function RegisterScreen() {
     }
 
     try {
+      await AsyncStorage.setItem('email', email); // Salva email logado
       await AsyncStorage.setItem(`user:${email}`, JSON.stringify({ email, senha, username }));
       Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
       navigation.goBack();
@@ -114,7 +107,6 @@ export default function RegisterScreen() {
             <Text style={styles.registerButtonText}>Cadastrar</Text>
           </TouchableOpacity>
 
-          {/* Redirecionamento para login */}
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Text style={styles.loginRedirectText}>
               Já tem cadastro? <Text style={styles.loginRedirectLink}>Faça login</Text>
@@ -130,7 +122,7 @@ const styles = StyleSheet.create({
   scroll: {
     flexGrow: 1,
     justifyContent: 'center',
-    backgroundColor: '#121212', // Corrige o fundo branco
+    backgroundColor: '#121212',
     paddingVertical: 30,
     paddingHorizontal: 20,
   },

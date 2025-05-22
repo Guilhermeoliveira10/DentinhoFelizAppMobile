@@ -1,15 +1,17 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import 'react-datepicker/dist/react-datepicker.css';
 import LoginScreen from './screens/LoginScreen';
-import RegisterScreen from './screens/RegisterScreen'; // ⬅️ Importação adicionada
+import RegisterScreen from './screens/RegisterScreen';
 import TabsNavigator from './navigation/TabsNavigator';
+import AdminDoubtScreen from './screens/AdminDoubtScreen';
+
 
 export type RootStackParamList = {
   Login: undefined;
-  Register: undefined; // ⬅️ Adicionado
+  Register: undefined;
   Main: undefined;
+  Admin: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -24,7 +26,7 @@ export default function App() {
           headerTintColor: '#fff',
           headerTitleStyle: { fontWeight: 'bold' },
         }}
-  >
+      >
         <Stack.Screen
           name="Login"
           component={LoginScreen}
@@ -39,6 +41,11 @@ export default function App() {
           name="Main"
           component={TabsNavigator}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Admin"
+          component={AdminDoubtScreen}
+          options={{ title: 'Admin Dúvidas' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -56,7 +56,8 @@ export default function LoginScreen() {
       return;
     }
 
-    // Lembrar dados se marcado
+    await AsyncStorage.setItem('email', email); // Armazena o email logado
+
     if (rememberMe) {
       await AsyncStorage.setItem('remember:email', email);
       await AsyncStorage.setItem('remember:senha', senha);
@@ -92,7 +93,6 @@ export default function LoginScreen() {
           onChangeText={setSenha}
         />
 
-        {/* Lembrar senha */}
         <TouchableOpacity
           style={styles.checkboxContainer}
           onPress={() => setRememberMe(!rememberMe)}

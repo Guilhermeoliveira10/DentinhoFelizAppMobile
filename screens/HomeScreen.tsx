@@ -19,7 +19,7 @@ type TabParamList = {
   Quiz: undefined;
   Help: undefined;
   Alarm: undefined;
-  Profile: undefined; // Adiciona Profile para navegação
+  Profile: undefined;
 };
 
 const { height } = Dimensions.get('window');
@@ -49,31 +49,20 @@ export default function HomeScreen() {
 
       await AsyncStorage.removeItem('email');
       await AsyncStorage.removeItem('senha');
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Login' as never }],
-      });
+      navigation.reset({ index: 0, routes: [{ name: 'Login' as never }] });
     } else {
-      Alert.alert(
-        'Deseja sair?',
-        'Você tem certeza que deseja fazer logout?',
-        [
-          { text: 'Cancelar', style: 'cancel' },
-          {
-            text: 'Sair',
-            style: 'destructive',
-            onPress: async () => {
-              await AsyncStorage.removeItem('email');
-              await AsyncStorage.removeItem('senha');
-              navigation.reset({
-                index: 0,
-                routes: [{ name: 'Login' as never }],
-              });
-            },
+      Alert.alert('Deseja sair?', 'Você tem certeza que deseja fazer logout?', [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Sair',
+          style: 'destructive',
+          onPress: async () => {
+            await AsyncStorage.removeItem('email');
+            await AsyncStorage.removeItem('senha');
+            navigation.reset({ index: 0, routes: [{ name: 'Login' as never }] });
           },
-        ],
-        { cancelable: false }
-      );
+        },
+      ]);
     }
   };
 
@@ -91,46 +80,25 @@ export default function HomeScreen() {
         )}
 
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('Profile')}
-          >
-            <Image source={require('../assets/icon_profile.png')} style={styles.icon} />
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Profile')}>
+            <Image source={require('../assets/icon_profile.png')} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Perfil</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('Quiz')}
-          >
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Quiz')}>
+            <Image source={require('../assets/quizzes.png')} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Quizzes</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('Help')}
-          >
-            <Image source={require('../assets/icon_help.png')} style={styles.icon} />
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Help')}>
+            <Image source={require('../assets/duvidas.png')} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Dúvidas</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('Alarm')}
-          >
-            <Image source={require('../assets/icon_alarm.png')} style={styles.icon} />
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Alarm')}>
+            <Image source={require('../assets/alarme.png')} style={styles.buttonImage} />
             <Text style={styles.buttonText}>Alarme</Text>
           </TouchableOpacity>
-        </View>
-
-        <View style={styles.mascotContainer}>
-          <View style={styles.bubbleWrapper}>
-            <Image source={require('../assets/bubble_background.png')} style={styles.bubble} />
-            <Text style={styles.bubbleText}>
-              Vamos brincar?{'\n'}Escolha uma das opções acima{'\n'}para o Super Dentinho te ajudar!
-            </Text>
-          </View>
-          <Image source={require('../assets/img_mascot.png')} style={styles.mascot} />
         </View>
       </View>
     </ScrollView>
@@ -166,87 +134,45 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     tintColor: '#444',
   },
-  logoutLabel: {
-    marginLeft: 6,
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#444',
-  },
   logo: {
-    width: 350,
+    width: 200,
     height: 200,
     resizeMode: 'contain',
     marginBottom: 10,
   },
   welcomeText: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 30,
     color: '#333',
+    textAlign: 'center',
   },
   buttonsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     width: '100%',
-    gap: 12,
-    marginBottom: 30,
+    paddingHorizontal: 10,
   },
   button: {
     backgroundColor: '#e06666',
-    paddingVertical: 12,
-    paddingHorizontal: 18,
-    borderRadius: 10,
     width: '47%',
-    flexDirection: 'row',
-    alignItems: 'center',
+    height: 140,
+    borderRadius: 20,
+    marginBottom: 20,
     justifyContent: 'center',
-    gap: 8,
+    alignItems: 'center',
+    padding: 10,
   },
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 18,
+    marginTop: 8,
   },
-  icon: {
-    width: 20,
-    height: 20,
-    tintColor: '#fff',
-    resizeMode: 'contain',
-  },
-  mascotContainer: {
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-    alignSelf: 'flex-end',
-    marginRight: 16,
-    position: 'absolute',
-    bottom: 50,
-  },
-  bubbleWrapper: {
-    position: 'relative',
-    width: 290,
-    height: 190,
-    marginBottom: -10,
-  },
-  bubble: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'contain',
-  },
-  bubbleText: {
-    position: 'absolute',
-    top: 32,
-    left: 16,
-    right: 16,
-    fontSize: 13,
-    color: '#000',
-    textAlign: 'center',
-    fontWeight: '600',
-    lineHeight: 20,
-  },
-  mascot: {
-    width: 130,
-    height: 130,
+  buttonImage: {
+    width: 50,
+    height: 50,
     resizeMode: 'contain',
   },
 });

@@ -15,12 +15,14 @@ export default function TabsNavigator() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarStyle: {
-          backgroundColor: '#fff',
-          borderTopColor: '#ddd',
-          paddingBottom: 5,
-          height: 60,
-        },
+        tabBarStyle: route.name === 'Home'
+          ? { display: 'none' }
+          : {
+              backgroundColor: '#fff',
+              borderTopColor: '#ddd',
+              paddingBottom: 5,
+              height: 60,
+            },
         tabBarLabelStyle: {
           fontSize: 12,
         },
