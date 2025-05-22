@@ -19,7 +19,7 @@
 - ✅ Tela de **Quiz** com perguntas carregadas de API externa
 - ✅ Tela de **Dúvidas** com categorias e conselhos específicos
 - ✅ Tela de **Alarme** com CRUD completo e persistência em `AsyncStorage`
-- ✅ Tela **Admin (CRUD completo)** para gerenciar dúvidas (conectada à fake API no Render)
+- ✅ Tela **Registrar Dúvida (CRUD completo)** para gerenciar dúvidas (conectada à API no Render)
 
 ---
 
@@ -31,11 +31,11 @@
 - **AsyncStorage**
 - **Axios**
 - **Expo ImagePicker**
-- **JSON Server (API Fake hospedada no Render)**
+- **JSON Server (API hospedada no Render)**
 
 ---
 
-## 🌐 Estrutura da API Fake (CRUD)
+## 🌐 Estrutura da API (CRUD)
 
 A API foi criada usando `JSON Server` e está publicada no [Render](https://render.com). Ela simula um backend para armazenar e manipular as dúvidas que aparecem no app.
 
